@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project — Alberik Stephan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-in">
+<script>window.BASE = "../";</script>
+
+<header id="site-nav"></header>
+
+<main>
+  <section class="wrap" style="max-width:860px; padding-block:40px 24px;">
+    <a class="back" id="p-back" href="collections.html"></a>
+    <div id="p-head"></div>
+    <div id="p-cover"></div>
+  </section>
+  <div class="prose" id="p-body" style="padding-block:0 24px;"></div>
+  <section class="wrap" style="max-width:860px; padding-block:8px 72px;">
+    <div id="p-link"></div>
+  </section>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="data/profile.js"></script>
+<script src="data/projects.js"></script>
+<script src="js/common.js"></script>
+<script>
+  (function () {
+    Layout.renderNav("collections");
+    Layout.renderFooter({ admin: false });
+
+    var back = document.getElementById("p-back");
+    back.innerHTML = ICON.back + " Back to collections";
+    back.href = R("code/collections.html");
+
+    var id = U.getParam("id");
+    var p = (window.PROJECTS || []).filter(function (x) { return x.id === id; })[0];
+    if (!p) {
+      document.getElementById("p-head").innerHTML = '<p style="color:var(--muted2);">Project not found. <a style="color:var(--ink); font-weight:600;" href="' + R("code/collections.html") + '">Back to collections</a>.</p>';
+      return;
+    }
+    document.title = p.title + " — Alberik Stephan";
+
+    var tags = (p.tags || []).map(function (t) { return '<span class="tag">' + U.esc(t) + "</span>"; }).join("");
+    document.getElementById("p-head").innerHTML =
+      '<p class="eyebrow">Project</p>' +
+      '<h1 class="h1" style="font-size:clamp(30px,6vw,46px);">' + U.esc(p.title) + "</h1>" +
+      '<p class="lead" style="margin:16px 0 0;">' + U.esc(p.description || "") + "</p>" +
+      (tags ? '<div class="tags" style="margin-top:16px;">' + tags + "</div>" : "");
+
+    if (p.image) {
+      document.getElementById("p-cover").innerHTML =
+        '<div style="margin-top:28px; border-radius:16px; overflow:hidden; border:1px solid var(--line); aspect-ratio:16/9; background:var(--line2);">' +
+          '<img src="' + R(p.image) + '" alt="' + U.esc(p.title) + '" style="width:100%; height:100%; object-fit:cover;"></div>';
+    }
+
+    document.getElementById("p-body").innerHTML = U.markdown(p.body || "");
+
+    if (p.link) {
+      document.getElementById("p-link").innerHTML =
+        '<a class="btn btn-primary" href="' + U.esc(p.link) + '" target="_blank" rel="noopener">View project ' + ICON.arrow + "</a>";
+    }
+  })();
+</script>
+</body>
+</html>

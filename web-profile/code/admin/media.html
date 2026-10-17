@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Image Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="admin">
+<script>window.BASE = "../../";</script>
+<header id="admin-top"></header>
+<div class="admin-layout">
+  <aside id="admin-side"></aside>
+  <main id="admin-main" class="admin-main"></main>
+</div>
+<script src="../data/profile.js"></script>
+<script src="../data/photos.js"></script>
+<script src="../data/nfts.js"></script>
+<script src="../data/projects.js"></script>
+<script src="../data/roles.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  if (Admin.requireAuth()) {
+    Admin.chrome("media");
+    var p = window.PROFILE || {};
+    var items = [];
+    function add(src, where, page) { if (src) items.push({ src: src, where: where, page: page }); }
+
+    add(p.photo, "Profile photo", "profile.html");
+    add(p.heroImage, "Home hero", "profile.html");
+    (window.PHOTOS || []).forEach(function (x) { add(x.image, "Photo · " + (x.title || x.id), "photos.html"); });
+    (window.NFTS || []).forEach(function (x) { add(x.image, "NFT · " + (x.name || x.id), "nfts.html"); });
+    (window.PROJECTS || []).forEach(function (x) { add(x.image, "Project · " + (x.title || x.id), "projects.html"); });
+    (window.ROLES || []).forEach(function (x) {
+      add(x.hero, "Role hero · " + (x.name || x.key), "roles.html");
+      (x.gallery || []).forEach(function (g) { add(g, "Role gallery · " + (x.name || x.key), "roles.html"); });
+    });
+
+    var main = document.getElementById("admin-main");
+    var grid = items.length ? '<div class="media-grid">' + items.map(function (it) {
+      return '<div class="media-card"><div class="thumb"><img src="' + R(it.src) + '" alt=""></div>' +
+        '<div class="meta"><span class="where" title="' + U.esc(it.where) + '">' + U.esc(it.where) + '</span>' +
+        '<a class="mini" href="' + R("code/admin/" + it.page) + '">Edit</a></div></div>';
+    }).join("") + "</div>" : '<div class="empty">No images yet. Upload some from the Photo Gallery, NFT Gallery, Projects, Roles or Profile pages.</div>';
+
+    main.innerHTML =
+      '<h1 style="margin:0 0 6px; font-family:var(--serif); font-weight:500; font-size:30px; color:var(--ink);">Image Library</h1>' +
+      '<p style="margin:0 0 20px; font-size:14.5px; color:var(--muted2);">Every image used on your site, in one place. ' + items.length + ' image(s).</p>' +
+      '<div class="note">Images are uploaded inside each section (Photo Gallery, NFT Gallery, Projects, Roles, Profile) and stored with that item — no folders to open. To change or remove an image, click <b>Edit</b> on its card to jump to the right section, then upload a new one or delete the item.</div>' +
+      grid;
+  }
+</script>
+</body>
+</html>

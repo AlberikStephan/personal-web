@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Settings (GitHub)</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="admin">
+<script>window.BASE = "../../";</script>
+<header id="admin-top"></header>
+<div class="admin-layout">
+  <aside id="admin-side"></aside>
+  <main id="admin-main" class="admin-main"></main>
+</div>
+<script src="../js/common.js"></script>
+<script src="../js/github.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  if (Admin.requireAuth()) {
+    Admin.chrome("settings");
+    var c = GH.cfg();
+    var main = document.getElementById("admin-main");
+    main.innerHTML =
+      '<h1 style="margin:0 0 6px; font-family:var(--serif); font-weight:500; font-size:30px; color:var(--ink);">Settings — GitHub publishing</h1>' +
+      '<p style="margin:0 0 20px; font-size:14.5px; color:var(--muted2);">Connect your repo once. After that, the Publish button on every page puts your changes live automatically.</p>' +
+      '<div class="note">Your token is saved <b>only in this browser</b>, never written into the site. Use a <b>fine-grained</b> token limited to this one repo, with <b>Contents: Read and write</b>, and set an expiry date. Do not paste it into any file.</div>' +
+      '<div class="panel">' +
+        '<div class="row">' +
+          '<div class="field"><label for="owner">GitHub username (owner)</label><input id="owner" type="text" placeholder="e.g. alberik" value="' + U.esc(c.owner) + '"></div>' +
+          '<div class="field"><label for="repo">Repository name</label><input id="repo" type="text" placeholder="e.g. web-profile" value="' + U.esc(c.repo) + '"></div>' +
+        '</div>' +
+        '<div class="row">' +
+          '<div class="field"><label for="branch">Branch</label><input id="branch" type="text" placeholder="main" value="' + U.esc(c.branch || "main") + '"></div>' +
+          '<div class="field"><label for="dir">Sub-folder in repo (optional)</label><input id="dir" type="text" placeholder="leave blank if index.html is at repo root" value="' + U.esc(c.dir) + '"></div>' +
+        '</div>' +
+        '<div class="field"><label for="token">Access token</label><input id="token" type="password" placeholder="github_pat_..." value="' + U.esc(c.token) + '"></div>' +
+        '<div class="actions" style="justify-content:flex-start; align-items:center;">' +
+          '<button type="button" class="btn btn-primary" id="save">Save</button>' +
+          '<button type="button" class="btn" id="test">Test connection</button>' +
+          '<button type="button" class="btn" id="clear">Clear token</button>' +
+          '<span id="st" style="font-size:13.5px; margin-left:4px;"></span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="panel" style="margin-top:20px;">' +
+        '<h3 style="margin:0 0 10px; font-family:var(--serif); font-weight:500; font-size:19px; color:var(--ink);">How to get a token (one time)</h3>' +
+        '<ol style="margin:0; padding-left:20px; font-size:14.5px; color:var(--muted); line-height:1.8;">' +
+          '<li>GitHub &rarr; your avatar &rarr; <b>Settings</b> &rarr; <b>Developer settings</b> &rarr; <b>Personal access tokens</b> &rarr; <b>Fine-grained tokens</b>.</li>' +
+          '<li><b>Generate new token</b>. Give it a name and an expiry.</li>' +
+          '<li>Repository access &rarr; <b>Only select repositories</b> &rarr; choose this site’s repo.</li>' +
+          '<li>Permissions &rarr; Repository permissions &rarr; <b>Contents</b> &rarr; <b>Read and write</b>.</li>' +
+          '<li>Generate, copy the token, paste it above, click <b>Save</b> then <b>Test connection</b>.</li>' +
+        '</ol>' +
+      '</div>';
+
+    function st(msg, kind) { var s = document.getElementById("st"); s.textContent = msg; s.style.color = kind === "err" ? "#b91c1c" : (kind === "ok" ? "#166534" : "var(--muted2)"); }
+    function readCfg() {
+      return {
+        owner: document.getElementById("owner").value,
+        repo: document.getElementById("repo").value,
+        branch: document.getElementById("branch").value || "main",
+        dir: document.getElementById("dir").value,
+        token: document.getElementById("token").value
+      };
+    }
+    document.getElementById("save").addEventListener("click", function () { GH.save(readCfg()); st("Saved in this browser.", "ok"); });
+    document.getElementById("test").addEventListener("click", function () {
+      GH.save(readCfg()); st("Testing…");
+      GH.test().then(function (name) { st("Connected to " + name, "ok"); }).catch(function (e) { st(e.message, "err"); });
+    });
+    document.getElementById("clear").addEventListener("click", function () {
+      document.getElementById("token").value = ""; GH.save(readCfg()); st("Token cleared from this browser.", "ok");
+    });
+  }
+</script>
+</body>
+</html>

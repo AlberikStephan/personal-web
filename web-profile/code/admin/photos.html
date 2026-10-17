@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Photo Gallery</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="admin">
+<script>window.BASE = "../../";</script>
+<header id="admin-top"></header>
+<div class="admin-layout">
+  <aside id="admin-side"></aside>
+  <main id="admin-main" class="admin-main"></main>
+</div>
+<script src="../data/profile.js"></script>
+<script src="../data/photos.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/github.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  if (Admin.requireAuth()) {
+    Admin.DataEditor({
+      active: "photos",
+      varName: "PHOTOS",
+      fileName: "photos.js",
+      title: "Photo Gallery",
+      intro: "Each photo is clickable on the site and opens its own detail page. No albums — just one flat gallery.",
+      source: window.PHOTOS,
+      titleField: "title",
+      ensureId: true, idKey: "id", idPrefix: "photo",
+      fields: [
+        { name: "title", label: "Title", type: "text", placeholder: "Sunset at the harbour" },
+        { name: "id", label: "Link id (optional)", type: "text", placeholder: "leave blank to auto-generate", hint: "Unique id used in the photo link. Leave blank and one is created for you." },
+        { name: "image", label: "Photo", type: "image", hint: "Upload an image straight from your computer — no file paths needed." },
+        { name: "date", label: "Date", type: "text", placeholder: "2026-10-01", hint: "Format: YYYY-MM-DD" },
+        { name: "location", label: "Location", type: "text", placeholder: "Denpasar, Bali" },
+        { name: "story", label: "Story", type: "textarea", placeholder: "The moment behind this photo…" },
+        { name: "camera", label: "Camera", type: "text", placeholder: "Sony A7 IV" },
+        { name: "lens", label: "Lens", type: "text", placeholder: "35mm f/1.8" },
+        { name: "aperture", label: "Aperture", type: "text", placeholder: "f/2.8" },
+        { name: "shutter", label: "Shutter", type: "text", placeholder: "1/250s" },
+        { name: "iso", label: "ISO", type: "text", placeholder: "200" },
+        { name: "focal", label: "Focal length", type: "text", placeholder: "35mm" }
+      ]
+    });
+  }
+</script>
+</body>
+</html>

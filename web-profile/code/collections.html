@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collections — Alberik Stephan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-in">
+<script>window.BASE = "../";</script>
+
+<header id="site-nav"></header>
+
+<main>
+  <section class="wrap" style="padding-block:72px 8px;">
+    <p class="eyebrow">Portfolio</p>
+    <h1 class="h1">Collections</h1>
+    <p class="lead" style="margin:20px 0 0; max-width:56ch;">Projects I have built, photographs I have taken, and items from my NFT gallery. Use the search in each section to find something quickly.</p>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="wrap" style="padding-block:48px 8px;">
+    <h2 class="h2" style="margin-bottom:6px;">My Project Showcase</h2>
+    <div class="toolbar"><div id="projects-search"></div></div>
+    <div class="grid grid-3" id="projects-grid"></div>
+  </section>
+
+  <!-- PHOTOGRAPH -->
+  <section class="wrap" style="padding-block:48px 8px;">
+    <h2 class="h2" style="margin-bottom:6px;">Photograph</h2>
+    <div class="toolbar"><div id="photos-search"></div></div>
+    <div class="grid grid-3" id="photos-grid"></div>
+  </section>
+
+  <!-- NFT -->
+  <section class="wrap" style="padding-block:48px 80px;">
+    <p class="eyebrow" style="margin-bottom:6px;">Web3</p>
+    <h2 class="h2" style="margin-bottom:6px;">NFT Gallery</h2>
+    <div class="toolbar"><div id="nfts-search"></div></div>
+    <div class="grid grid-3" id="nfts-grid"></div>
+  </section>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="data/profile.js"></script>
+<script src="data/projects.js"></script>
+<script src="data/photos.js"></script>
+<script src="data/nfts.js"></script>
+<script src="js/common.js"></script>
+<script>
+  (function () {
+    Layout.renderNav("collections");
+    Layout.renderFooter({ admin: false });
+
+    /* ---- Projects ---- */
+    var projects = window.PROJECTS || [];
+    function projectCard(p) {
+      var img = '<div class="thumb"><img src="' + R(p.image || "image/placeholder.svg") + '" alt="' + U.esc(p.title) + '"></div>';
+      var tags = (p.tags || []).map(function (t) { return '<span class="tag">' + U.esc(t) + "</span>"; }).join("");
+      var inner =
+        img +
+        '<div class="body">' +
+          '<h3 class="t">' + U.esc(p.title) + "</h3>" +
+          '<p class="d">' + U.esc(p.description || "") + "</p>" +
+          (tags ? '<div class="tags">' + tags + "</div>" : "") +
+        "</div>";
+      return '<a class="tile lift" href="' + R("code/project.html") + "?id=" + encodeURIComponent(p.id) + '">' + inner + "</a>";
+    }
+    function renderProjects(q) {
+      var list = projects.filter(function (p) { return U.matches(p, q, ["title", "description", "tags"]); });
+      var el = document.getElementById("projects-grid");
+      el.innerHTML = list.length ? list.map(projectCard).join("") :
+        '<div class="empty" style="grid-column:1/-1;">No projects found.</div>';
+    }
+    document.getElementById("projects-search").appendChild(makeSearch("Search projects…", renderProjects));
+    renderProjects("");
+
+    /* ---- Photos (flat, clickable, no albums) ---- */
+    var photos = window.PHOTOS || [];
+    function mediaCard(item, type) {
+      return '<a class="tile lift" href="' + R("code/photo.html") + "?type=" + type + "&id=" + encodeURIComponent(item.id) + '">' +
+        '<div class="thumb"><img src="' + R(item.image || "image/placeholder.svg") + '" alt="' + U.esc(item.title || item.name || "") + '"></div>' +
+        '<div class="body"><h3 class="t">' + U.esc(item.title || item.name || "") + "</h3>" +
+          '<p class="d">' + U.esc(item.location || item.collection || "") + "</p></div>" +
+      "</a>";
+    }
+    function renderPhotos(q) {
+      var list = photos.filter(function (p) { return U.matches(p, q, ["title", "location", "story"]); }).slice(0, 10);
+      var el = document.getElementById("photos-grid");
+      el.innerHTML = list.length ? list.map(function (p) { return mediaCard(p, "photo"); }).join("") :
+        '<div class="empty" style="grid-column:1/-1;">No photos found.</div>';
+    }
+    document.getElementById("photos-search").appendChild(makeSearch("Search photos…", renderPhotos));
+    renderPhotos("");
+
+    /* ---- NFTs (square, clickable) ---- */
+    var nfts = window.NFTS || [];
+    function nftCard(item) {
+      return '<a class="tile card-sq lift" href="' + R("code/photo.html") + "?type=nft&id=" + encodeURIComponent(item.id) + '">' +
+        '<div class="thumb"><img src="' + R(item.image || "image/placeholder.svg") + '" alt="' + U.esc(item.name || "") + '"></div>' +
+        '<div class="body"><h3 class="t">' + U.esc(item.name || "") + "</h3>" +
+          '<p class="d">' + U.esc(item.collection || "") + "</p></div>" +
+      "</a>";
+    }
+    function renderNfts(q) {
+      var list = nfts.filter(function (n) { return U.matches(n, q, ["name", "collection", "chain", "story"]); }).slice(0, 10);
+      var el = document.getElementById("nfts-grid");
+      el.innerHTML = list.length ? list.map(nftCard).join("") :
+        '<div class="empty" style="grid-column:1/-1;">No items found.</div>';
+    }
+    document.getElementById("nfts-search").appendChild(makeSearch("Search NFT gallery…", renderNfts));
+    renderNfts("");
+  })();
+</script>
+</body>
+</html>

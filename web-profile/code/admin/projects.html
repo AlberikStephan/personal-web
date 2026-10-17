@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Project Showcase</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="admin">
+<script>window.BASE = "../../";</script>
+<header id="admin-top"></header>
+<div class="admin-layout">
+  <aside id="admin-side"></aside>
+  <main id="admin-main" class="admin-main"></main>
+</div>
+<script src="../data/profile.js"></script>
+<script src="../data/projects.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/github.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  if (Admin.requireAuth()) {
+    Admin.DataEditor({
+      active: "projects",
+      varName: "PROJECTS",
+      fileName: "projects.js",
+      title: "Project Showcase",
+      intro: "Add the projects shown in the “My Project Showcase” section on the Collections page.",
+      source: window.PROJECTS,
+      titleField: "title",
+      ensureId: true, idKey: "id", idPrefix: "project",
+      fields: [
+        { name: "title", label: "Project title", type: "text", placeholder: "Hotel helpdesk tool" },
+        { name: "id", label: "Id (optional)", type: "text", placeholder: "leave blank to auto-generate" },
+        { name: "description", label: "Short description (card)", type: "textarea", placeholder: "One line shown on the card." },
+        { name: "body", label: "Full write-up (project page)", type: "textarea", placeholder: "Blank line = paragraph. '## ' = subheading. '> ' = quote.", hint: "Shown on the project's own page." },
+        { name: "date", label: "Date", type: "text", placeholder: "2026-09-01", hint: "Format: YYYY-MM-DD" },
+        { name: "tags", label: "Tags", type: "tags", placeholder: "Web, Coding, AI", hint: "Separate tags with commas." },
+        { name: "image", label: "Image", type: "image", hint: "Upload an image straight from your computer. Leave empty to use the sample image." },
+        { name: "link", label: "Link (optional)", type: "text", placeholder: "https://…", hint: "If set, the card opens this link in a new tab." }
+      ]
+    });
+  }
+</script>
+</body>
+</html>

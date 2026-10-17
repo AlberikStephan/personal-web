@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Articles</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="admin">
+<script>window.BASE = "../../";</script>
+<header id="admin-top"></header>
+<div class="admin-layout">
+  <aside id="admin-side"></aside>
+  <main id="admin-main" class="admin-main"></main>
+</div>
+<script src="../data/profile.js"></script>
+<script src="../data/articles.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/github.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  if (Admin.requireAuth()) {
+    Admin.DataEditor({
+      active: "articles",
+      varName: "ARTICLES",
+      fileName: "articles.js",
+      title: "Write Article",
+      intro: "Add, edit or remove articles. Published items show on the site; drafts stay hidden.",
+      source: window.ARTICLES,
+      titleField: "title",
+      badgeField: "status",
+      badgeLive: "Published",
+      fields: [
+        { name: "title", label: "Article title", type: "text", placeholder: "Write a catchy title…" },
+        { name: "slug", label: "Link id (slug)", type: "text", placeholder: "my-article-title", hint: "Unique, lowercase, dashes instead of spaces. Used in the page link." },
+        { name: "category", label: "Category", type: "select", options: ["AI", "Blockchain", "Technology"] },
+        { name: "status", label: "Status", type: "select", options: ["Published", "Draft"] },
+        { name: "date", label: "Date", type: "text", placeholder: "2026-10-12", hint: "Format: YYYY-MM-DD" },
+        { name: "readMinutes", label: "Read time (minutes)", type: "number", placeholder: "6" },
+        { name: "excerpt", label: "Short summary", type: "textarea", placeholder: "One or two sentences shown in the list." },
+        { name: "cover", label: "Cover image path (optional)", type: "text", placeholder: "image/my-cover.jpg", hint: "Put the file in the image folder, then write its path here. Leave blank for none." },
+        { name: "body", label: "Article body", type: "textarea", placeholder: "Write here. Blank line = new paragraph. '## Heading' = subheading. '> text' = quote.", hint: "Blank line = paragraph · '## ' = subheading · '> ' = quote." }
+      ]
+    });
+  }
+</script>
+</body>
+</html>

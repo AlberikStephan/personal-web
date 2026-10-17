@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Role — Alberik Stephan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-in">
+<script>window.BASE = "../";</script>
+
+<header id="site-nav"></header>
+
+<main>
+  <section style="background:#B6B0A7;">
+    <div class="wrap" style="padding-block:72px;">
+      <a class="back" id="role-back" href="../index.html" style="color:#52525b;"></a>
+      <div id="role-hero" style="display:flex; flex-wrap:wrap; gap:56px; align-items:center;"></div>
+    </div>
+  </section>
+
+  <section class="wrap" style="max-width:760px; padding-block:72px 24px;">
+    <span style="font-family:var(--serif); color:var(--faint); font-size:15px;">01</span>
+    <h2 class="h2" style="margin:8px 0 24px;">Background</h2>
+    <div id="role-bg" style="font-size:18.5px; line-height:1.8; color:#3f3f46;"></div>
+  </section>
+
+  <section class="wrap" style="padding-block:48px 80px;">
+    <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:24px;">
+      <div><span style="font-family:var(--serif); color:var(--faint); font-size:15px;">02</span>
+        <h2 class="h2" style="margin:6px 0 0;">Gallery</h2></div>
+    </div>
+    <div class="grid grid-3" id="role-gallery"></div>
+  </section>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="data/profile.js"></script>
+<script src="data/roles.js"></script>
+<script src="js/common.js"></script>
+<script>
+  (function () {
+    Layout.renderNav("home");
+    Layout.renderFooter({ admin: false });
+
+    var back = document.getElementById("role-back");
+    back.innerHTML = ICON.back + " All roles";
+    back.href = R("index.html");
+
+    var key = U.getParam("role");
+    var roles = window.ROLES || [];
+    var r = roles.filter(function (x) { return x.key === key; })[0] || roles[0];
+    if (!r) { document.getElementById("role-hero").innerHTML = "<p>Role not found.</p>"; return; }
+    document.title = r.name + " — Alberik Stephan";
+
+    document.getElementById("role-hero").innerHTML =
+      '<div style="flex:999 1 420px; min-width:0;">' +
+        '<p style="margin:0 0 18px; font-size:12.5px; letter-spacing:.16em; text-transform:uppercase; color:#52525b; font-weight:700;">' + U.esc(r.name) + "</p>" +
+        '<h1 style="margin:0; font-family:var(--serif); font-weight:500; font-size:52px; line-height:1.05; letter-spacing:-.02em; color:#18181b;">' + U.esc(r.title || r.name) + "</h1>" +
+        '<p style="margin:26px 0 0; font-size:18px; color:#3f3f46; max-width:52ch;">' + U.esc(r.intro || "") + "</p>" +
+      "</div>" +
+      '<div style="flex:1 1 360px; min-width:0; display:flex; justify-content:center;">' +
+        '<div style="width:100%; max-width:420px; aspect-ratio:4/5; border-radius:18px; overflow:hidden; border:1px solid rgba(0,0,0,.1); background:#cfcac2;">' +
+          '<img src="' + R(r.hero || "image/placeholder.svg") + '" alt="' + U.esc(r.name) + '" style="width:100%; height:100%; object-fit:cover;"></div>' +
+      "</div>";
+
+    var bg = (r.background || []).map(function (para) { return "<p style='margin:0 0 24px;'>" + U.esc(para) + "</p>"; }).join("");
+    if (r.quote) bg += '<blockquote style="margin:32px 0; padding:4px 0 4px 24px; border-left:3px solid #18181b; font-family:var(--serif); font-style:italic; font-size:22px; color:#18181b; line-height:1.45;">“' + U.esc(r.quote) + '”</blockquote>';
+    document.getElementById("role-bg").innerHTML = bg;
+
+    var gal = r.gallery || [];
+    document.getElementById("role-gallery").innerHTML = gal.length ? gal.map(function (src) {
+      return '<div class="tile"><div class="thumb"><img src="' + R(src) + '" alt=""></div></div>';
+    }).join("") : '<div class="empty" style="grid-column:1/-1;">No photos yet.</div>';
+  })();
+</script>
+</body>
+</html>

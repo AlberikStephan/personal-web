@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — NFT Gallery</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="admin">
+<script>window.BASE = "../../";</script>
+<header id="admin-top"></header>
+<div class="admin-layout">
+  <aside id="admin-side"></aside>
+  <main id="admin-main" class="admin-main"></main>
+</div>
+<script src="../data/profile.js"></script>
+<script src="../data/nfts.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/github.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  if (Admin.requireAuth()) {
+    Admin.DataEditor({
+      active: "nfts",
+      varName: "NFTS",
+      fileName: "nfts.js",
+      title: "NFT Gallery",
+      intro: "Each item is clickable on the site and opens its own detail page.",
+      source: window.NFTS,
+      titleField: "name",
+      ensureId: true, idKey: "id", idPrefix: "nft",
+      fields: [
+        { name: "name", label: "Item name", type: "text", placeholder: "Sample Item #01" },
+        { name: "id", label: "Link id (optional)", type: "text", placeholder: "leave blank to auto-generate", hint: "Unique id used in the link. Leave blank and one is created for you." },
+        { name: "collection", label: "Collection", type: "text", placeholder: "Demo Collection" },
+        { name: "image", label: "Image", type: "image", hint: "Upload an image straight from your computer — no file paths needed." },
+        { name: "date", label: "Date", type: "text", placeholder: "2026-09-20", hint: "Format: YYYY-MM-DD" },
+        { name: "chain", label: "Chain", type: "text", placeholder: "Ethereum, Solana, …" },
+        { name: "link", label: "NFT link", type: "text", placeholder: "https://opensea.io/…", hint: "Marketplace or item URL — shown as a button on the item page." },
+        { name: "story", label: "Story", type: "textarea", placeholder: "The story behind this item…" }
+      ]
+    });
+  }
+</script>
+</body>
+</html>

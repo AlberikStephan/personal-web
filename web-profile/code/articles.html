@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Articles &amp; Research — Alberik Stephan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .art-row{display:flex; flex-wrap:wrap; gap:36px; padding:30px 0; border-bottom:1px solid var(--line);}
+  .art-meta{flex:1 1 150px; min-width:0; color:var(--faint); font-size:13.5px;}
+  .art-meta .cat{display:block; color:var(--ink); font-weight:600; font-size:12px; letter-spacing:.08em; text-transform:uppercase;}
+  .art-main{flex:999 1 460px; min-width:0;}
+  .art-main h3{margin:0 0 8px; font-family:var(--serif); font-weight:500; font-size:26px; color:var(--ink);}
+  .art-more{display:inline-flex; align-items:center; gap:6px; margin-top:14px; font-size:14px; font-weight:600; color:var(--ink);}
+</style>
+</head>
+<body class="page-in">
+<script>window.BASE = "../";</script>
+
+<header id="site-nav"></header>
+
+<main>
+  <section class="wrap" style="padding-block:72px 8px;">
+    <p class="eyebrow">Writing</p>
+    <h1 class="h1">Articles &amp; Research</h1>
+    <p class="lead" style="margin:20px 0 28px; max-width:56ch;">Notes and research on AI, Blockchain, and technology — written for anyone to read.</p>
+    <div class="toolbar">
+      <div id="art-search" style="flex:1 1 240px;"></div>
+      <div class="chips" id="art-chips"></div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-block:0 80px;">
+    <div style="border-top:1px solid var(--line);" id="art-list"></div>
+  </section>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="data/profile.js"></script>
+<script src="data/articles.js"></script>
+<script src="js/common.js"></script>
+<script>
+  (function () {
+    Layout.renderNav("article");
+    Layout.renderFooter({ admin: true });
+
+    var CATS = ["All", "AI", "Blockchain", "Technology"];
+    var state = { cat: "All", q: "" };
+    var published = (window.ARTICLES || []).filter(function (a) { return (a.status || "Published") === "Published"; });
+
+    function render() {
+      var list = published.filter(function (a) {
+        var okCat = state.cat === "All" || a.category === state.cat;
+        return okCat && U.matches(a, state.q, ["title", "excerpt", "category", "body"]);
+      });
+      var el = document.getElementById("art-list");
+      if (!list.length) {
+        el.innerHTML = '<div class="empty" style="margin-top:24px;">No articles in this category yet.</div>';
+        return;
+      }
+      el.innerHTML = list.map(function (a) {
+        return '<a class="art-row" href="' + R("code/article.html") + "?slug=" + encodeURIComponent(a.slug) + '">' +
+          '<div class="art-meta"><span class="cat">' + U.esc(a.category) + "</span>" +
+            '<span style="display:block; margin-top:6px;">' + U.fmtDate(a.date) + " · " + U.esc(a.readMinutes || 5) + " min read</span>" +
+            '<span style="display:block; margin-top:4px; color:var(--faint);">' + U.esc(U.relativeTime(a.date)) + "</span></div>" +
+          '<div class="art-main"><h3>' + U.esc(a.title) + "</h3>" +
+            '<p style="margin:0; font-size:16px; color:var(--muted2);">' + U.esc(a.excerpt || "") + "</p>" +
+            '<span class="art-more">Read ' + ICON.arrow + "</span></div>" +
+        "</a>";
+      }).join("");
+    }
+
+    function renderChips() {
+      document.getElementById("art-chips").innerHTML = CATS.map(function (c) {
+        return '<button type="button" class="chip' + (c === state.cat ? " active" : "") + '" data-cat="' + c + '">' + c + "</button>";
+      }).join("");
+      document.querySelectorAll("#art-chips .chip").forEach(function (b) {
+        b.addEventListener("click", function () { state.cat = b.getAttribute("data-cat"); renderChips(); render(); });
+      });
+    }
+
+    document.getElementById("art-search").appendChild(makeSearch("Search articles…", function (v) { state.q = v; render(); }));
+    renderChips();
+    render();
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Role Gallery</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="admin">
+<script>window.BASE = "../../";</script>
+<header id="admin-top"></header>
+<div class="admin-layout">
+  <aside id="admin-side"></aside>
+  <main id="admin-main" class="admin-main"></main>
+</div>
+<script src="../data/profile.js"></script>
+<script src="../data/roles.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/github.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  if (Admin.requireAuth()) {
+    Admin.DataEditor({
+      active: "roles",
+      varName: "ROLES",
+      fileName: "roles.js",
+      title: "Role Gallery & Story",
+      intro: "The four role pages linked from the Home cards. Keep the “Link id” unique.",
+      source: window.ROLES,
+      titleField: "name",
+      fields: [
+        { name: "name", label: "Role name", type: "text", placeholder: "IT Professional" },
+        { name: "key", label: "Link id (key)", type: "text", placeholder: "it-professional", hint: "Unique, lowercase, dashes. Used in role.html?role=KEY" },
+        { name: "cardText", label: "Home card text", type: "text", placeholder: "Short line shown on the Home card." },
+        { name: "title", label: "Page title", type: "text", placeholder: "A strong one-line title for this role" },
+        { name: "intro", label: "Intro", type: "textarea", placeholder: "A short intro about this role." },
+        { name: "hero", label: "Hero image", type: "image", hint: "Upload the main image for this role." },
+        { name: "background", label: "Background (story)", type: "paragraphs", placeholder: "Your journey in this role…", hint: "Leave a blank line between paragraphs." },
+        { name: "quote", label: "Quote (optional)", type: "text", placeholder: "A line about your philosophy." },
+        { name: "gallery", label: "Gallery images", type: "imagelist", hint: "Add as many photos as you like — upload them straight from your computer." }
+      ]
+    });
+  }
+</script>
+</body>
+</html>

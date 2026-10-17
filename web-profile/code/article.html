@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Article — Alberik Stephan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-in">
+<script>window.BASE = "../";</script>
+
+<header id="site-nav"></header>
+
+<main>
+  <article class="prose" style="padding-block:56px 24px;">
+    <a class="back" href="articles.html"></a>
+    <div id="art-body"></div>
+  </article>
+  <div class="prose" style="padding-block:24px 72px;">
+    <div style="border-top:1px solid var(--line); padding-top:28px;">
+      <a class="art-back-2" href="articles.html" style="display:inline-flex; align-items:center; gap:7px; font-size:15px; font-weight:600; color:var(--ink);"></a>
+    </div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="data/profile.js"></script>
+<script src="data/articles.js"></script>
+<script src="js/common.js"></script>
+<script>
+  (function () {
+    Layout.renderNav("article");
+    Layout.renderFooter({ admin: true });
+
+    var backTxt = ICON.back + " All articles";
+    document.querySelector(".back").innerHTML = backTxt;
+    document.querySelector(".back").href = R("code/articles.html");
+    var back2 = document.querySelector(".art-back-2");
+    back2.innerHTML = ICON.back + " Back to all articles";
+    back2.href = R("code/articles.html");
+
+    var p = window.PROFILE || {};
+    var slug = U.getParam("slug");
+    var a = (window.ARTICLES || []).filter(function (x) { return x.slug === slug; })[0];
+    var body = document.getElementById("art-body");
+    if (!a) {
+      body.innerHTML = '<p style="color:var(--muted2);">Sorry, that article could not be found. <a style="color:var(--ink); font-weight:600;" href="' + R("code/articles.html") + '">Back to all articles</a>.</p>';
+      return;
+    }
+    document.title = a.title + " — Alberik Stephan";
+    var cover = a.cover ? '<div style="height:320px; border-radius:16px; overflow:hidden; background:#f4f4f5; margin:32px 0 40px;"><img src="' + R(a.cover) + '" alt="' + U.esc(a.title) + '" style="width:100%; height:100%; object-fit:cover;"></div>' : "";
+    body.innerHTML =
+      '<p style="margin:0 0 16px; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink); font-weight:700;">' + U.esc(a.category) + "</p>" +
+      '<h1 style="margin:0; font-family:var(--serif); font-weight:500; font-size:46px; line-height:1.1; letter-spacing:-.02em; color:var(--ink);">' + U.esc(a.title) + "</h1>" +
+      '<div style="display:flex; gap:10px; align-items:center; margin:22px 0; color:var(--faint); font-size:14.5px;">' +
+        '<span style="color:var(--muted); font-weight:600;">' + U.esc(p.name || "") + "</span><span>·</span><span>" + U.fmtDate(a.date) + "</span><span>·</span><span>" + U.esc(a.readMinutes || 5) + " min read</span><span>·</span><span>" + U.esc(U.relativeTime(a.date)) + "</span></div>" +
+      cover +
+      U.markdown(a.body);
+  })();
+</script>
+</body>
+</html>

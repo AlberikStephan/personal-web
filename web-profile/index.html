@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alberik Stephan — Profile &amp; Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="code/css/style.css">
+<style>
+  @keyframes rise{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
+  @keyframes unmask{from{clip-path:inset(0 0 100% 0);transform:translateY(40px);}to{clip-path:inset(0 0 0 0);transform:none;}}
+  .motion .t-in{animation:rise .9s cubic-bezier(.16,1,.3,1) both;}
+  .motion .t-mask{animation:unmask 1.1s cubic-bezier(.16,1,.3,1) both;}
+  .motion .d0{animation-delay:.05s;} .motion .d1{animation-delay:.15s;}
+  .motion .d2{animation-delay:.35s;} .motion .d3{animation-delay:.5s;}
+  .motion .d4{animation-delay:.65s;} .motion .d5{animation-delay:.8s;}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+  @keyframes orbitA{from{transform:rotate(-16deg) scaleY(.52);}to{transform:rotate(344deg) scaleY(.52);}}
+  @keyframes orbitB{from{transform:rotate(22deg) scaleY(.44);}to{transform:rotate(-338deg) scaleY(.44);}}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(22,163,74,.45);}100%{box-shadow:0 0 0 9px rgba(22,163,74,0);}}
+  .motion .idle-float{animation:rise 1s .3s cubic-bezier(.16,1,.3,1) both, float 6s 1.3s ease-in-out infinite;}
+  .motion .orbit-a{animation:orbitA 48s linear infinite;}
+  .motion .orbit-b{animation:orbitB 64s linear infinite;}
+  .motion .idle-bob{animation:rise .8s 1s both, bob 4.5s 1.8s ease-in-out infinite;}
+  .motion .dot-pulse{animation:pulse 2s ease-out infinite;}
+  @keyframes reveal{from{opacity:0;transform:translateY(36px) scale(.98);}to{opacity:1;transform:none;}}
+  @supports (animation-timeline: view()){
+    .motion .reveal{animation:reveal linear both; animation-timeline:view(); animation-range:entry 5% cover 28%;}
+  }
+  .hero-grid{display:flex; flex-wrap:wrap; gap:56px; align-items:center; padding:84px 0 72px;}
+  .hero-left{flex:999 1 460px; min-width:0;}
+  .hero-name{margin:0; font-family:var(--serif); font-weight:500; font-size:clamp(40px,8vw,68px); line-height:1.02; letter-spacing:-.02em; color:var(--ink);}
+  .hero-tag{margin:14px 0 0; font-family:var(--serif); font-style:italic; font-size:24px; color:var(--muted2);}
+  .hero-meta{display:flex; gap:28px; flex-wrap:wrap; margin-top:40px; color:var(--muted2); font-size:14.5px;}
+  .hero-meta span{display:inline-flex; align-items:center; gap:8px;}
+  .orbit{position:absolute; border:1.5px solid; border-radius:50%; opacity:.5;}
+  .role-cards{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; padding:24px 0 72px;}
+  @media (max-width:900px){.role-cards{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:560px){.role-cards{grid-template-columns:1fr;}}
+  .role-card{display:block; border:1px solid var(--line); border-radius:14px; padding:24px;}
+  .role-card h3{margin:14px 0 6px; font-family:var(--serif); font-weight:500; font-size:20px; color:var(--ink);}
+  .role-card p{margin:0; font-size:14px; color:var(--muted2);}
+  .about{border-top:1px solid var(--line); background:var(--panel);}
+  .about-grid{display:flex; flex-wrap:wrap; gap:56px; padding-block:72px;}
+  .about-photo{margin-top:28px; width:160px; height:160px; border-radius:50%; overflow:hidden; border:1px solid var(--line2); box-shadow:0 16px 36px -22px rgba(0,0,0,.35);}
+  .about-photo img{width:100%; height:100%; object-fit:cover; object-position:50% 30%;}
+  .feat{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; padding:72px 0;}
+  @media (max-width:640px){.feat{grid-template-columns:1fr;}}
+  .feat a{display:block; border:1px solid var(--line); border-radius:16px; padding:32px;}
+  .feat .arrow svg{transition:transform .3s cubic-bezier(.16,1,.3,1);}
+  .feat a:hover .arrow svg{transform:translate(3px,-3px);}
+  @media (prefers-reduced-motion: reduce){.motion *{animation:none !important;}}
+</style>
+</head>
+<body class="page-in">
+<script>window.BASE = "";</script>
+
+<header id="site-nav"></header>
+
+<main class="motion">
+  <!-- HERO -->
+  <section class="wrap">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <p class="eyebrow t-in d0">Profile &amp; Portfolio</p>
+        <h1 class="hero-name t-mask d1" id="p-name"></h1>
+        <p class="hero-tag t-in d2" id="p-tag"></p>
+        <p class="lead t-in d3" id="p-intro" style="margin:28px 0 0; max-width:48ch;"></p>
+        <div class="t-in d4" style="margin-top:36px;">
+          <a class="btn" id="p-read" href="code/articles.html">Read Articles</a>
+        </div>
+        <div class="hero-meta t-in d5">
+          <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="1.8" aria-hidden="true"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 1118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span id="p-loc"></span></span>
+          <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><span id="p-avail"></span></span>
+        </div>
+      </div>
+      <div style="flex:1 1 360px; min-width:0; display:flex; justify-content:center;">
+        <div style="position:relative; display:inline-block;">
+          <div class="orbit orbit-a" aria-hidden="true" style="inset:-7% -9%; border-color:#71717a; transform:rotate(-16deg) scaleY(.52);"></div>
+          <div class="orbit orbit-b" aria-hidden="true" style="inset:1% 1%; border-color:#a1a1aa; transform:rotate(22deg) scaleY(.44);"></div>
+          <img class="idle-float" id="p-hero" alt="" style="position:relative; display:block; width:360px; max-width:80vw; height:auto;">
+          <div class="idle-bob" style="position:absolute; right:-6px; bottom:2%; background:#fff; border:1px solid var(--line); box-shadow:0 14px 34px -18px rgba(0,0,0,.3); border-radius:12px; padding:9px 13px; font-size:12.5px; display:flex; gap:9px; align-items:center;">
+            <span class="dot-pulse" style="width:9px; height:9px; border-radius:50%; background:#16a34a;"></span>
+            <span><b style="color:#18181b;">LIVE</b> · Personal web profile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROLE CARDS -->
+  <section class="wrap">
+    <div class="role-cards" id="role-cards"></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about">
+    <div class="wrap about-grid">
+      <div class="reveal" style="flex:1 1 240px; min-width:0;">
+        <span style="font-family:var(--serif); color:var(--faint); font-size:15px;">01</span>
+        <h2 class="h2" id="about-heading" style="margin:8px 0 0; font-size:36px;"></h2>
+        <div class="about-photo"><img id="about-photo" alt=""></div>
+      </div>
+      <div class="reveal" style="flex:999 1 460px; min-width:0;">
+        <div id="about-text" style="font-size:18px; color:#3f3f46;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED -->
+  <section class="wrap">
+    <div class="feat">
+      <a class="reveal" href="code/collections.html">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-family:var(--serif); font-size:24px; color:var(--ink);">Collections</span>
+          <span class="arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"></path></svg></span>
+        </div>
+        <p style="margin:10px 0 0; font-size:15px; color:var(--muted2);">Projects, photography &amp; NFT gallery — take a look!</p>
+      </a>
+      <a class="reveal" href="code/articles.html">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-family:var(--serif); font-size:24px; color:var(--ink);">Research &amp; Articles</span>
+          <span class="arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"></path></svg></span>
+        </div>
+        <p style="margin:10px 0 0; font-size:15px; color:var(--muted2);">Notes and research on AI, Blockchain and technology.</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="code/data/profile.js"></script>
+<script src="code/data/roles.js"></script>
+<script src="code/js/common.js"></script>
+<script>
+  (function () {
+    var p = window.PROFILE || {};
+    Layout.renderNav("home");
+    Layout.renderFooter({ admin: false });
+
+    document.getElementById("p-name").textContent = p.name || "";
+    document.getElementById("p-tag").textContent = p.tagline || "";
+    document.getElementById("p-intro").textContent = p.heroIntro || "";
+    document.getElementById("p-loc").textContent = p.location || "";
+    document.getElementById("p-avail").textContent = p.availability || "";
+    document.getElementById("p-read").href = R("code/articles.html");
+    var hero = document.getElementById("p-hero");
+    hero.src = R(p.heroImage || "image/hero-ascii.png");
+    hero.alt = "ASCII art portrait of " + (p.name || "");
+
+    document.getElementById("about-heading").textContent = p.aboutHeading || "About me";
+    var ap = document.getElementById("about-photo");
+    ap.src = R(p.photo || "image/profile.jpg");
+    ap.alt = p.name || "";
+    document.getElementById("about-text").innerHTML =
+      (p.about || []).map(function (para) { return "<p style='margin:0 0 18px;'>" + U.esc(para) + "</p>"; }).join("");
+
+    var roles = window.ROLES || [];
+    document.getElementById("role-cards").innerHTML = roles.map(function (r, i) {
+      return '<a class="role-card reveal" href="' + R("code/role.html") + "?role=" + encodeURIComponent(r.key) + '">' +
+        '<h3>' + U.esc(r.name) + "</h3>" +
+        "<p>" + U.esc(r.cardText || r.intro || "") + "</p>" +
+      "</a>";
+    }).join("");
+  })();
+</script>
+</body>
+</html>
